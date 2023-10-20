@@ -11,4 +11,9 @@ class GameObject{
         this.x += x;
         this.y += y;
     }
+
+    Collides(object){
+        return (this.x < object.x + object.w && this.x + this.w > object.x &&
+                this.y < object.y + object.h && this.y + this.h > object.y)
+    }
 }

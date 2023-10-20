@@ -1,4 +1,5 @@
 class Game{
+    #score = 0;
     constructor(canvas){
         this.c = canvas;
         this.ctx = this.c.getContext("2d");
@@ -22,13 +23,20 @@ class Game{
     Update(){
         this.time.UpdateDeltaTime();
         this.ctx.clearRect(0, 0, this.c.width, this.c.height);
-        this.dinosaur.JumpUpdate();
 
         this.obstacles.forEach((x) => {
-            x.Draw();
             x.Move(-1000 * this.time.deltaTime, 0);
-            if(x.x < -x.w) x.x = this.c.width;
+            if(x.x < -x.w){
+                x.x = this.c.width;
+                this.#score++;
+            }
+            if(this.dinosaur.Collides(x)){
+                console.log("game over");
+            } 
+            x.Draw();
         });
+
+        this.dinosaur.JumpUpdate();
         this.dinosaur.Draw();
 
         if(this.input.KeyDown(" ")) this.dinosaur.Jump();
