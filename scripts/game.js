@@ -9,10 +9,11 @@ class Game{
         window.onresize = () => {this.ResizeCanvas();}
         this.ResizeCanvas();
 
-        this.interval = setInterval(this.Update.bind(this));
+        this.dinosaur = new Dinosaur(this, 100, 400, 100, 100);
+        this.obstacles = [];
+        this.nextObstacleSpawn = 0;
 
-        this.dinosaur = new Dinosaur(this, 0, 400, 100, 100);
-        this.obstacles = [new Obstacle(this, 400, 400, 100, 100)];
+        this.interval = setInterval(this.Update.bind(this));
     }
 
     ResizeCanvas(){
@@ -24,10 +25,11 @@ class Game{
         this.time.UpdateDeltaTime();
         this.ctx.clearRect(0, 0, this.c.width, this.c.height);
 
-        this.obstacles.forEach((x) => {
+        this.obstacles.forEach((x, index) => {
             x.Move(-1000 * this.time.deltaTime, 0);
             if(x.x < -x.w){
                 x.x = this.c.width;
+                this.obstacles.splice(index, 1);
                 this.#score++;
             }
             if(this.dinosaur.Collides(x)){
@@ -40,5 +42,11 @@ class Game{
         this.dinosaur.Draw();
 
         if(this.input.KeyDown(" ")) this.dinosaur.Jump();
+
+        if(this.nextObstacleSpawn <= 0){
+            this.obstacles.push(new Obstacle(this, this.c.width, 400, 100, 100));
+            this.nextObstacleSpawn = Math.random() + .75;
+        }
+        this.nextObstacleSpawn -= this.time.deltaTime;
     }
 }
