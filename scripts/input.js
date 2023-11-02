@@ -10,7 +10,7 @@ class Input{
         }
     }
     KeyDown(key){
-        if(this.keysDown[key] === undefined) this.keysDown[key] = false;
-        return this.keysDown[key];
+        if(this.keysDown[key.toLowerCase()] === undefined) this.keysDown[key.toLowerCase()] = false;
+        return this.keysDown[key.toLowerCase()];
     }
 }
